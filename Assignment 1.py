@@ -13,19 +13,21 @@ class NBC():
 
 
     def fit(self, Xtrain, ytrain):
-        self.length = len(ytrain)
+        for i in range(self.num_classes):
+            prior = len(Xtrain[ytrain == i]) / len(Xtrain)
+            for j in range(len(self.feature_types)):
+                dist = self.find_condi_distribution(Xtrain[ytrain == i][:, j])
 
-        unique, counts = np.unique(ytrain, return_counts=True)
-        self.classes = unique
-        self.class_count = dict(zip(unique, counts))
-        for key, value in self.class_count.items():
-            self.class_distribution[key] = value/self.length
-
-        print(Xtrain)
-        for c in self.classes:
-            return 0
 
         return self.class_distribution
+
+# classify one example
+Xsample, ysample = X[0], y[0]
+py0 = probability(Xsample, priory0, distX1y0, distX2y0)
+py1 = probability(Xsample, priory1, distX1y1, distX2y1)
+print('P(y=0 | %s) = %.3f' % (Xsample, py0*100))
+print('P(y=1 | %s) = %.3f' % (Xsample, py1*100))
+print('Truth: y=%d' % ysample)
 
     def predict(self, Xtest):
         return 0
@@ -37,6 +39,11 @@ class NBC():
         # fit distribution
         dist = norm(class_mean, sigma)
         return dist
+    
+# calculate the independent conditional probability
+def probability(X, prior, dist1, dist2):
+    return prior * dist1.pdf(X[0]) * dist2.pdf(X[1])
+
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
