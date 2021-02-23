@@ -39,7 +39,7 @@ print('Truth: y=%d' % ysample)
         # fit distribution
         dist = norm(class_mean, sigma)
         return dist
-    
+
 # calculate the independent conditional probability
 def probability(X, prior, dist1, dist2):
     return prior * dist1.pdf(X[0]) * dist2.pdf(X[1])
